@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Cam</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      padding: 2rem;
+    }
+    img {
+      max-width: 90%;
+      height: auto;
+      border: 3px solid #333;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>[ CAM FEED // LIVE ]</h2>
+  <img id="camFeed" src="" alt="Webcam Feed" />
+  <p id="status">Connecting...</p>
+
+  <script>
+    const IMAGE_BASE_URL = "https://<YOUR_PROJECT_REF>.supabase.co/storage/v1/object/public/cam/latest.jpg";
+    const imgEl = document.getElementById("camFeed");
+    const statusEl = document.getElementById("status");
+
+    function refreshFrame() {
+      const timestamp = new Date().getTime();
+      const nextImg = new Image();
+      nextImg.onload = () => {
+        imgEl.src = nextImg.src;
+        statusEl.textContent = `Last frame received: ${new Date().toLocaleTimeString()}`;
+      };
+      nextImg.src = `${IMAGE_BASE_URL}?t=${timestamp}`;
+    }
+
+    // Initial load and periodic poll every 15 seconds
+    refreshFrame();
+    setInterval(refreshFrame, 15000);
+  </script>
+</body>
+</html>
